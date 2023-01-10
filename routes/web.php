@@ -19,3 +19,11 @@ Route::get('/', function () {
 });
 
 Route::get('/get', [TestRouteController::class, 'postRequest'])->name('get');
+
+Route::get('/check', ['as' => 'middle', 'middleware' => 'adult', function () {
+    return view('age_approved');
+}]);
+
+Route::get('/check', function () {
+    return view('age_approved');
+})->middleware('age');
