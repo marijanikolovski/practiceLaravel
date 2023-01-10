@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TestRouteController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +28,5 @@ Route::get('/check', ['as' => 'middle', 'middleware' => 'adult', function () {
 Route::get('/check', function () {
     return view('age_approved');
 })->middleware('age');
+
+Route::get('/home', [HomeController::class, 'index'])->name('first_name');
