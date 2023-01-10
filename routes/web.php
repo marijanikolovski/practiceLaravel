@@ -29,4 +29,4 @@ Route::get('/check', function () {
     return view('age_approved');
 })->middleware('age');
 
-Route::get('/home', [HomeController::class, 'index'])->name('first_name');
+Route::resource('home', HomeController::class);
