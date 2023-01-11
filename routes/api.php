@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
-
+use App\Http\Controllers\DataController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -45,5 +46,14 @@ Route::controller(PostsController::class)->group(
         Route::get('/post/{id}', 'show');
         Route::post('/create', 'store');
         Route::delete('/post/{id}', 'destroy');
+    }
+);
+
+Route::post('/auth/login', [AuthController::class, 'login']);
+
+Route::controller(DataController::class)->group(
+    function () {
+        Route::get('/open', 'open');
+        Route::get('/closed', 'closed')->middleware('auth:api');
     }
 );
