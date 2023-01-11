@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\TestRouteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,14 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/get', [TestRouteController::class, 'postRequest'])->name('get');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::get('/check', ['as' => 'middle', 'middleware' => 'adult', function () {
-    return view('age_approved');
-}]);
-
-Route::get('/check', function () {
-    return view('age_approved');
-})->middleware('age');
-
-Route::resource('home', HomeController::class);
+require __DIR__.'/auth.php';
