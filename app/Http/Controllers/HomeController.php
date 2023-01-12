@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exceptions\CustomException;
 
 class HomeController extends Controller
 {
@@ -14,6 +15,10 @@ class HomeController extends Controller
     public function index()
     {
         $first_name = 'Marija';
+
+        if ($first_name == 'Marija') {
+            throw new CustomException('You must change your name');
+        }
 
         return view('home', compact('first_name'));
     }
