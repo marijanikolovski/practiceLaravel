@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +32,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return response('create method', 200);
     }
 
     /**
@@ -39,15 +43,18 @@ class PostsController extends Controller
      */
     public function store(CreatePostRequest $request)
     {
-        $validated = $request->validated();
+        if ($request->user()->can('update', Post::class)) {
+            $validated = $request->validated();
 
-        $post = Post::create([
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-            'user_id' => auth()->id()
-        ]);
+            $post = Post::create([
+                'title' => $validated['title'],
+                'content' => $validated['content'],
+                'user_id' => auth()->id()
+            ]);
 
-        return response()->json($post, 201);
+            return response()->json($post, 201);
+        }
+        return response('Unauthorise', 401);
     }
 
     /**
@@ -69,9 +76,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return response('edit method', 200);
     }
 
     /**
@@ -81,9 +88,12 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, EditPostRequest $request)
+    public function update(Request $request, Post $post)
     {
-        //
+        if ($request->user()->can('update', Post::class)) {
+            return response('store method', 200);
+        }
+        return response('Unauthorize', 403);
     }
 
     /**
@@ -92,11 +102,14 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $post = Post::find($id);
-        $post->delete();
+        if ($request->user()->can('delete', Post::class)) {
+            $post = Post::find($id);
+            $post->delete();
 
-        return response()->noContent();
+            return response()->noContent();
+        }
+        return response('Unauthorize', 403);
     }
 }

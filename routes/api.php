@@ -40,14 +40,9 @@ Route::delete('/delete', function () {
     return 'This is delete route.';
 })->name('delete');
 
-Route::controller(PostsController::class)->group(
-    function () {
-        Route::get('/post', 'index');
-        Route::get('/post/{id}', 'show');
-        Route::post('/create', 'store');
-        Route::delete('/post/{id}', 'destroy');
-    }
-);
+Route::resources([
+    'post' => PostsController::class,
+]);
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 
